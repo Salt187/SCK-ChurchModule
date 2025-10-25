@@ -1,0 +1,49 @@
+#通用信息，并指定生效的环境
+spring:
+  profiles:
+    active: dev
+  data:
+    redis:
+      host: 192.168.10.3
+      password: xiao0703
+      port: 6379
+      database: 1      # 指定数据库
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+          max-wait: 1000ms
+  jackson:
+    default-property-inclusion: non_null # JSON处理时忽略非空字段
+  application:
+    name: AdminModule
+#  cloud:
+#    nacos:
+#      config:
+#        server-addr: localhost:8848
+#        file-extension: yml
+#      discovery:
+#        cluster-name: WH      #单个实例的集群归属配置
+#        namespace: Salt1      #命名空间  相同环境下的服务才可以相互访问
+#    loadbalancer:
+#      nacos:
+#        enabled: true
+
+#      clients:
+#        AdminModule:
+#   优先调用相同集群的实例
+#  config:
+#    import: nacos:${spring.application.name}.${spring.cloud.nacos.config.file-extension}  # 导入Nacos配置
+
+
+
+#设置前缀
+server:
+  servlet:
+    context-path: /xry
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true    #mybatis自动转换大小写
+  mapper-locations: classpath:org/xry/churchmodule/dao/*.xml  # 若有 XML 映射文件application-dev.yml
