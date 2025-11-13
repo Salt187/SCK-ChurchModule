@@ -3,11 +3,12 @@ package org.xry.churchmodule.service.Imp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xry.churchmodule.dao.DivinationMapper;
-import org.xry.churchmodule.exception.Exceptions.serviceException;
-import org.xry.churchmodule.pojo.Code;
+
 import org.xry.churchmodule.pojo.Omen;
 import org.xry.churchmodule.service.DivinationService;
-import org.xry.churchmodule.utils.ThreadLocalUtils.UserId;
+import org.xry.interceptors.exception.Exceptions.serviceException;
+import org.xry.interceptors.pojo.Code;
+import org.xry.interceptors.utils.ThreadLocalUtils.UserId;
 
 import java.util.Date;
 import java.util.Random;
@@ -24,13 +25,14 @@ public class divinationServiceImp implements DivinationService {
         //据随机数取真实id
         int id = randomInt(1, 6, luckyNum);
 
+        System.out.println("抽到了"+id);
+
         //存储占卜结果
         try {
             mapper.insertOmen(UserId.getId(),id,new Date());
         } catch (Exception e) {
-            throw new serviceException("明日再会",Code.BUSINESS_ERROR);
+            throw new serviceException("明日再会", Code.BUSINESS_ERROR);
         }
-
         //查完整结果并返回
         return mapper.getOmenById(id).getFirst();
     }
@@ -42,6 +44,7 @@ public class divinationServiceImp implements DivinationService {
             throw new IllegalArgumentException("min 必须小于 max");
         }
         // 1. 基于种子创建 Random 实例（相同种子会生成完全相同的随机序列）
+        seed += System.currentTimeMillis();
         Random random = new Random(seed);
         // 2. 生成 [0, max - min) 范围内的随机数，再加上 min 偏移到目标范围
         int range = max - min;
